@@ -1,16 +1,23 @@
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeFilter } from 'contactsStorage/contactsSlice';
 import styles from './contactFilter.module.css';
 
-export const Filter = ({ value, onChange }) => {
+export const ContactsFilter = () => {
+  const dispatch = useDispatch();
+  const filter = useSelector(state => state.contacts.filter);
+
+  const onChange = element => {
+    dispatch(changeFilter(element.currentTarget.value));
+  };
+
   return (
     <div className={styles.section}>
       <h2>Find contacts by name</h2>
-      <input className={styles.input} onChange={onChange} value={value}></input>
+      <input
+        className={styles.input}
+        onChange={onChange}
+        value={filter}
+      ></input>
     </div>
   );
-};
-
-Filter.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
 };

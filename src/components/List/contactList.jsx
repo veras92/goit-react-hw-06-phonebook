@@ -1,32 +1,23 @@
+import { useSelector } from 'react-redux';
 import { ContactsListItem } from './ListItems/contactListItem';
-import PropTypes from 'prop-types';
 import styles from './contactsList.module.css';
 
-export const ContactsList = ({ contacts, handleRemove }) => {
+const getContacts = (items, filter) =>
+  items.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
+export const ContactsList = () => {
+  const items = useSelector(state => state.contacts.items);
+  const filter = useSelector(state => state.contacts.filter);
+  const contacts = getContacts(items, filter);
   return (
     <ul className={styles.section}>
       {contacts.length
         ? contacts.map(({ id, name, number }) => (
-            <ContactsListItem
-              key={id}
-              id={id}
-              name={name}
-              number={number}
-              handleRemove={handleRemove}
-            />
+            <ContactsListItem key={id} id={id} name={name} number={number} />
           ))
         : 'No contacts'}
     </ul>
   );
-};
-
-ContactsList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ),
-  handleRemove: PropTypes.func.isRequired,
 };
